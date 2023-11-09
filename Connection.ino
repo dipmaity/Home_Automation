@@ -1,86 +1,27 @@
- int tx=1;
-int rx=0;
-int r=11;
-int reds=0;
-int bs=0;
-int gs=0;
-int b=12;
-int g=6;
-int ser;
-int relay1=8;
-int relay2=9;
-
+#define RELAY_ON 0
+#define RELAY_OFF 1
+#define RELAY_1 4
+char data = 0;
 void setup() {
-  // put your setup code here, to run once:
-pinMode(r,OUTPUT);
-pinMode(g,OUTPUT);
-pinMode(b,OUTPUT);
-pinMode(relay1,OUTPUT);
-pinMode(relay2,OUTPUT); 
+// Set pin as output.
+pinMode(RELAY_1, OUTPUT);
+// Initialize relay one as off so that on reset it would be off by default
+digitalWrite(RELAY_1, RELAY_OFF);
 Serial.begin(9600);
+Serial.print(“Type: 1 to turn on bulb. 0 to turn it off!”);
 }
-
 void loop() {
-  // put your main code here, to run repeatedly:
-
-
- 
- 
-  
- if(Serial.available()>0)
-{ser=Serial.read();
-Serial.println(ser);
-
- if(reds== 0 && ser ==255 )
-{
-  digitalWrite(r,HIGH);
-  digitalWrite(relay1,HIGH );
-  Serial.println("BULB 1 ON");
-  ser = 0;
-  reds = 1;
-  }
-if(ser == 255 && reds== 1 )
-{
-  digitalWrite(r,LOW);
-  digitalWrite(relay1,LOW );
-   Serial.println("BULB 1 OFF");
-    ser = 0;
-  reds = 0;
-  }
-  
- if( bs== 0 && ser ==254 )
-{
-  digitalWrite(b,HIGH);
-  digitalWrite(relay2,HIGH );
-  Serial.println("BULB 2 ON");
-  ser = 0;
-  bs = 1;
-  }
-if(  bs== 1 && ser ==254)
-{
-  digitalWrite(b,LOW);
-  digitalWrite(relay2,LOW );
-    Serial.println("BULB 2 OFF");
-    ser = 0;
-  bs = 0;
-  } 
-
-if(gs== 0 && ser== 249 )
-{
-  digitalWrite(g,HIGH);
-  ser = 0;
-  gs = 1;
-  }
-if(gs== 1 && ser == 249 )
-{
-  digitalWrite(g,LOW);
-    ser = 0;
-  gs = 0;
-  }
-
+if (Serial.available() &gt; 0) {
+data = Serial.read(); //Read the incoming data and store it into variable data
+Serial.print(data); //Print Value inside data in Serial monitor
+Serial.print(“\n”); //New line
+if(data == ‘1’){
+digitalWrite(RELAY_1, RELAY_ON);
+Serial.println(“Bulb is now turned ON.”);
 }
- 
+else if(data == ‘0’){
+digitalWrite(RELAY_1, RELAY_OFF);
+Serial.println(“Bulb is now turned OFF.”);
 }
-
-
-
+}
+}
